@@ -1,0 +1,33 @@
+{
+  "name": "Hoymiles Client",
+  "version": "0.0.1",
+  "slug": "hoymiles_cli_edge",
+  "description": "Read Hoymiles Data from Cloud",
+  "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+  "url": "https://github.com/abankowski/ha-hoymiles",
+  "startup": "application",
+  "boot": "auto",
+  "init": false,
+  "hassio_api": false,
+  "homeassistant_api": false,
+  "hassio_role": "default",
+  "devicetree": false,
+  "services": [
+    "mqtt:need"
+  ],
+  "ingress": false,
+  "host_network": true,
+  "panel_icon": "mdi:solar-power",
+  "panel_title": "Hoymiles Client",
+  "panel_admin": false,
+  "options": {
+    "HOYMILES_USER": "HOYMILES_USER",
+    "HOYMILES_PASSWORD": "HOYMILES_PASSWORD",
+    "HOYMILES_STATION_ID": "123456",
+  },
+  "schema": {
+    "HOYMILES_USER": "str",
+    "HOYMILES_PASSWORD": "password",
+    "HOYMILES_STATION_ID": "str",
+  }
+}

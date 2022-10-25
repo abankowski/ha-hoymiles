@@ -1,0 +1,754 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'Hoymiles cloud API PVM'
+  description: Hoymiles
+
+servers:
+  - url: https://global.hoymiles.com/platform/api/gateway
+
+paths:
+  /iam/auth_login:
+    summary: IAM Authentication for user
+    post:
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthLoginRequest'
+      responses:
+        '200':
+          description: Successful authentication result with token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthLoginResponse'
+              example:
+                status: "0"
+                message: "success"
+                data:
+                  token: "123token321"
+                systemNotice: ""
+  /iam/user_me:
+    summary: Get authenticated user
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetUserMeRequest'
+      responses:
+        '200':
+          description: Authenticated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserMeResponse'
+  /pvm/station_select_device_all:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StationRequest'
+      summary: Get all devices
+      responses:
+        '200':
+          description: Devices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationSelectDeviceAllResponse'    
+  /pvm-data/data_find_details: #TODO
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataFindDetailsRequest'      
+      summary: Get devices tree
+      responses:
+        '200':
+          description: Devices tree
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataFindDetailsResponse'  
+  /pvm/station_select_device_of_tree:
+    post:
+      summary: Get devices tree
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StationRequest'
+      responses:
+        '200':
+          description: Devices tree
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationSelectDeviceOfTreeResponse'
+  /pvm/station_find:
+    post:
+      summary: Get devices tree
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StationRequest'
+      responses:
+        '200':
+          description: Station information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StationFindResponse'
+  /pvm-data/data_count_station_real_data:   
+    post:
+      summary: Fetch data for station
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StationDataRequest'          
+      responses:
+        '200':
+          description: Station data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataCountStationRealDataResponse'
+components:
+  schemas:
+    DataFindDetailsRequest:
+      type: object
+      properties:
+        WAITING_PROMISE:
+          type: boolean
+        body:
+          type: object
+          properties:
+            mi_id:
+              type: integer
+            mi_sn:
+              type: string
+            port:
+              type: integer
+            sid:
+              type: integer
+            warn_code:
+              type: integer
+            time:
+              type: string    
+          required:
+            - mi_id
+            - mi_sn
+            - port
+            - sid
+            - warn_code
+            - time
+      required:
+        - body
+        - WAITING_PROMISE
+    DataFindDetailsResponse:
+      type: object
+      properties:
+        status: 
+          type: string
+        message:
+          type: string
+        systemNotice:
+          type: string
+        data: 
+          type: object
+          properties:
+            mi_sn:
+              type: string
+            net_state:
+              type: integer
+            warn_list:
+              type: array
+              items:
+                type: object
+                properties:
+                  err_code:
+                    type: integer
+                  start_at: 
+                    type: string
+                  end_at:
+                    type: string
+                  wdd1:
+                    type: string
+                  wd1:
+                    type: string
+                  wdd2:
+                    type: string
+                  wd2: 
+                    type: string
+            dbg:
+              type: boolean
+#             warn_shielf_set skipped array
+    GetUserMeResponse:
+      description: Autenthicated user response payload
+      type: object
+      properties:
+        status: 
+          type: string
+        message: 
+          type: string
+        data:
+          type: object 
+          properties:
+            id:
+              type: integer
+            create_at:
+              type: string
+            create_by:
+              type: integer
+            email:
+              type: string
+            identity: 
+              type: integer
+            name:
+              type: string
+            phone:
+              type: string
+            role_ids:
+              type: array
+              items:
+                type: integer
+            src:
+              type: integer
+            status:
+              type: integer
+            tid:
+              type: integer
+            type:
+              type: integer
+            update_at:
+              type: string
+            update_by:
+              type: integer
+            user_name:
+              type: string
+              #warn allows
+            gid:
+              type: integer
+            # group
+            # tenant
+            # services
+            # roles
+            city_id: 
+              type: integer
+        systemNotice:
+          type: string 
+    AuthLoginRequest:
+      description: Station Find Request
+      type: object
+      properties:
+        ERROR_BACK:
+          type: boolean
+        WAITING_PROMISE:
+          type: boolean
+        body:
+          type: object
+          properties:
+            password:
+              type: string
+            user_name:
+              type: string
+          required:
+            - password
+            - user_name
+      required:
+        - ERROR_BACK
+        - WAITING_PROMISE
+        - body
+    GetUserMeRequest:
+      description: Get authenticated user details
+      type: object
+      properties:
+        ERROR_BACK:
+          type: boolean
+        WAITING_PROMISE:
+          type: boolean
+      required:
+        - ERROR_BACK
+        - WAITING_PROMISE
+    AuthLoginResponse:
+      description: Auth Login response with token
+      type: object
+      properties:
+        status: 
+          type: string
+        message: 
+          type: string
+        data: 
+          type: object
+          properties:
+            token: 
+              type: string        
+          required:
+            - token
+        systemNotice:
+          type: string   
+      required:
+        - status
+        - message
+    StationRequest:
+      description: Station Request
+      type: object
+      properties:
+        WAITING_PROMISE:
+          type: boolean
+        body:
+          type: object
+          properties:
+            id:
+              type: integer
+          required:
+            - id
+      required:
+        - ERROR_BACK
+        - WAITING_PROMISE
+        - body
+    StationDataRequest:
+      description: Station Data Request
+      type: object
+      properties:
+        WAITING_PROMISE:
+          type: boolean
+        body:
+          type: object
+          properties:
+            sid:
+              type: integer
+          required:
+            - sid
+      required:
+        - ERROR_BACK
+        - WAITING_PROMISE
+        - body
+    DataCountStationRealDataResponse: 
+      description: Station Find Response envelope
+      type: object
+      properties:
+        status: 
+          type: string
+        message: 
+          type: string
+        data: 
+          type: object
+          properties:
+            capacitor:
+              type: string
+            co2_emission_reduction: 
+              type: string
+            data_time: 
+              type: string
+            is_balance:
+              type: integer
+            is_reflux:
+              type: integer
+            last_data_time:
+              type: string
+            month_eq:
+              type: string
+            plant_tree:
+              type: string
+            real_power:
+              type: string
+            today_eq:
+              type: string
+            total_eq:
+              type: string
+            year_eq: 
+              type: string   
+        systemNotice:
+          type: string    
+    DeviceWarnData:
+      type: object
+      properties:
+        connect: 
+          type: boolean
+        warn:
+          type: boolean
+        _rw:
+          type: string
+      required:
+        - connect
+        - warn
+    StationSelectDeviceOfTree:
+      type: object
+      properties:
+        dtu_sn:
+          type: string
+        hard_ver:
+          type: string
+        id:
+          type: integer
+        model_no:
+          type: string
+        replace_num:
+          type: integer
+        sn:
+          type: string
+        soft_ver:
+          type: string
+        type:
+          type: integer
+        version:
+          type: integer
+        warn_data:
+          $ref: '#/components/schemas/DeviceWarnData'
+        # extend_data skipped
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/StationSelectDeviceOfTree'
+    StationSelectDeviceOfTreeResponse: 
+      description: Station Select Device Tree Response envelope
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StationSelectDeviceOfTree'
+        systemNotice:
+          type: string
+      required:
+        - status
+        - message
+        - data
+    StationSelectDeviceAllResponse: 
+      description: StationSelectDeviceAllResponse
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              dtu:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  sn:
+                    type: string
+                  version:
+                    type: integer
+                  soft_ver:
+                    type: string
+                  hard_ver:
+                    type: string
+                  model_no:
+                    type: string
+                  replace_num:
+                    type: integer
+                  warn_data:
+                    $ref: '#/components/schemas/DeviceWarnData'
+              repeater_list:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    micros:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/StationSelectDeviceMicro'
+        systemNotice:
+          type: string
+    StationSelectDeviceMicro:
+      type: object
+      properties:
+        id: 
+          type: integer
+        dev_type:
+          type: integer
+        sn:
+          type: string
+        dtu_sn:
+          type: string
+        version:
+          type: integer
+        soft_ver:
+          type: string
+        hard_ver:
+          type: string
+        init_hard_no:
+          type: string
+        port_array:
+          type: array
+          items: 
+            type: integer
+        replace_num:
+          type: integer
+        grid_id:
+          type: integer
+        grid_name:
+          type: string
+        grid_version:
+          type: string
+        series: # unknown type
+          type: string
+        series_name:
+          type: string
+        warn_data:
+          type: object
+          properties:
+            _raw_warns:
+              type: string
+            track_time:
+              type: string
+            _l_time:
+              type: integer
+            warn:
+              type: boolean
+            connect:
+              type: boolean
+            _dtu_link:
+              type: boolean          
+    StationFindRequest:
+      description: Station Find Request
+      type: object
+      properties:
+        ERROR_BACK:
+          type: boolean
+        WAITING_PROMISE:
+          type: boolean
+        body:
+          type: object
+          properties:
+            id: 
+              type: integer
+          required:
+            - id      
+      required:
+        - ERROR_BACK
+        - WAITING_PROMISE
+        - body
+    StationFindResponse: 
+      description: Station Find Response envelope
+      type: object
+      properties:
+        status: 
+          type: string
+        message: 
+          type: string
+        data: 
+          type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+            gid:
+              type: integer
+            name: 
+              type: string
+            type: 
+              type: integer
+            tz_id:
+              type: integer
+            city_code: 
+              type: string
+            status:
+              type: integer
+            create_by: 
+              type: integer
+            create_at:
+              type: string
+            classify:
+              type: integer
+            tz_name: 
+              type: string
+            pic_path:
+              type: string
+            capacitor:
+              type: string
+            address:
+              type: string 
+            layout_step:
+              type: integer
+            is_balance:
+              type: integer
+            is_reflux:
+              type: integer
+            remarks: 
+              type: string
+            config:
+              $ref: '#/components/schemas/StationDescConfig'
+            is_stars:
+              type: integer
+            money_unit:
+              type: string
+            electricity_price:
+              type: integer
+            in_price:
+              type: number
+            usd:
+              type: string
+            city_id:
+              type: integer
+            weather_of_cid:
+              type: integer
+            timezone:
+              $ref: '#/components/schemas/Timezone'
+            local_time:
+              type: string
+            parent_city:
+              type: array
+              items:
+                $ref: '#/components/schemas/ParentCity'
+            latitude:
+              type: string
+            longitude:
+              type: string
+            meter_location:
+              type: integer
+            owner_list:
+              type: array
+              items:
+                $ref: '#/components/schemas/StationOwner'
+            group:
+              $ref: '#/components/schemas/StationGroup'
+            money_data:
+              type: object
+              properties:
+                code:
+                  type: string
+                unit:
+                  type: string          
+              required:
+                - code
+                - unit
+            warn_data:
+              $ref: '#/components/schemas/StationWarnData'
+            bms_capacitor:
+              type: string
+        systemNotice:
+          type: string
+    StationDescConfig:
+      description: StationDesc config subobject
+      type: object
+      properties:
+        sun_spec_num:
+          type: integer
+        power_limit: 
+          type: string
+        power_limit_pf: 
+          type: string
+        power_limit_re: 
+          type: string
+        module_max_power: 
+          type: integer
+        owner_is_show_layout: 
+          type: integer
+        owner_is_modify_dev: 
+          type: integer
+        billing_type: 
+          type: integer 
+        billing_start: 
+          type: string
+        billing_every: 
+          type: integer
+        client_type: 
+          type: integer
+    StationWarnData:
+      type: object
+      properties:
+        s_uoff:
+          type: boolean
+        s_ustable:
+          type: boolean
+        s_uid:
+          type: boolean
+        l3_warn:
+          type: boolean
+        g_warn:
+          type: boolean
+        me_warn:
+          type: boolean
+    StationGroup:
+      type: object
+      properties:
+        id: 
+          type: integer
+        name:  
+          type: string
+        pid:
+          type: integer
+        tid:  
+          type: integer
+        contact:  
+          type: string
+        phone:  
+          type: string
+        area:  
+          type: string
+        icon:  
+          type: string
+    StationOwner:
+      type: object
+      properties:
+        uid:
+          type: integer
+        name:
+          type: string
+        user_name:
+          type: string
+    ParentCity:
+      type: object
+      properties:
+        id:
+          type: integer
+        pid: 
+          type: integer
+        code: 
+          type: string
+        weather_of_cid:
+          type: integer
+        city_name:
+          type: string
+        country_code:
+          type: string
+        level:
+          type: integer
+    Timezone:
+      type: object
+      properties:
+        id:
+          type: integer
+        dis_name: 
+          type: string
+        name: 
+          type: string
+        tz_name:
+          type: string
+        offset:
+          type: integer
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: hm_token
+security:
+  - cookieAuth: []
