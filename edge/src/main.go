@@ -16,7 +16,12 @@ import (
 
 // TODO: Move main content to package
 func main() {
-	if viper.BindEnv("HOYMILES_STATION_ID") != nil || viper.BindEnv("MQTT_HOST") != nil || viper.BindEnv("MQTT_USER") != nil || viper.BindEnv("MQTT_PASSWORD") != nil {
+	if viper.BindEnv("HOYMILES_CLOUD_STATION_ID") != nil ||
+		viper.BindEnv("HOYMILES_CLOUD_USER") != nil ||
+		viper.BindEnv("HOYMILES_CLOUD_PASSWORD") != nil ||
+		viper.BindEnv("MQTT_HOST") != nil ||
+		viper.BindEnv("MQTT_USER") != nil ||
+		viper.BindEnv("MQTT_PASSWORD") != nil {
 		log.Panic("Some errors in binding env variables")
 	}
 
@@ -62,10 +67,10 @@ func main() {
 func updateAll(ctx context.Context, mqttClient mqtt.Client) {
 
 	// TODO: take this from configuration
-	station := viper.GetInt("hoymiles_station_id")
+	station := viper.GetInt("hoymiles_cloud_station_id")
 	c, err := hoymiles.NewClient(
-		viper.GetString("hoymiles_username"),
-		viper.GetString("hoymiles_password"),
+		viper.GetString("hoymiles_cloud_username"),
+		viper.GetString("hoymiles_cloud_password"),
 		ctx,
 		true)
 

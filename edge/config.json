@@ -21,13 +21,13 @@
   "panel_title": "Hoymiles Client",
   "panel_admin": false,
   "options": {
-    "HOYMILES_USER": "HOYMILES_USER",
-    "HOYMILES_PASSWORD": "HOYMILES_PASSWORD",
-    "HOYMILES_STATION_ID": "123456",
+    "HOYMILES_CLOUD_USER": "HOYMILES_USER",
+    "HOYMILES_CLOUD_PASSWORD": "HOYMILES_PASSWORD",
+    "HOYMILES_CLOUD_STATION_ID": "123456",
   },
   "schema": {
-    "HOYMILES_USER": "str",
-    "HOYMILES_PASSWORD": "password",
-    "HOYMILES_STATION_ID": "str",
+    "HOYMILES_CLOUD_USER": "str",
+    "HOYMILES_CLOUD_PASSWORD": "password",
+    "HOYMILES_CLOUD_STATION_ID": "str",
   }
 }
