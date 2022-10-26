@@ -2,7 +2,7 @@
   "name": "Hoymiles Client",
   "version": "0.0.1",
   "slug": "hoymiles_cli_edge",
-  "description": "Read Hoymiles Data from Cloud",
+  "description": "Read Hoymiles Data from the Cloud",
   "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
   "url": "https://github.com/abankowski/ha-hoymiles",
   "startup": "application",
